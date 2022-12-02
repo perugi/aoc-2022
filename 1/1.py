@@ -26,5 +26,5 @@ print(f"The elf with the most Calories is carrying {cal_counts[0]} Calories.")
 """ Part Two """
 # Find the largest three calory counts
 print(
-    f"The top three elves carrying the most Calories are carrying {sum(cal_counts[0:3])} Calories"
+    f"The top three elves carrying the most Calories are carrying {sum(cal_counts[0:3])} Calories."
 )
