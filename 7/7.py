@@ -24,18 +24,18 @@ class Folder:
     def get_children(self):
         return [child.name for child in self.children]
 
-    def get_size(self):
-        """Return the size of all the files in the folder and its children."""
-        size = sum([file.size for file in self.files])
-        size += sum([child.get_size() for child in self.children])
-        return size
-
     def get_sizes(self):
         """Return a list of sizes of the current folder and all its children."""
-        sizes = [self.get_size()]
-        for child in self.children:
-            sizes += child.get_sizes()
-        return sizes
+        file_size = sum([file.size for file in self.files])
+        if not self.children:
+            return [file_size]
+        else:
+            sizes = [file_size]
+            for child in self.children:
+                child_sizes = child.get_sizes()
+                sizes[0] += child_sizes[0]
+                sizes += child_sizes
+            return sizes
 
     def print_tree(self, level=0):
         print(level * "  " + f"- {self.name} (dir)")
@@ -80,7 +80,7 @@ print(f"Total size of directories, smaller than {MAX_FILE}: {size_sum}")
 """ Part Two """
 DISK_SPACE = 70000000
 UNUSED_TARGET = 30000000
-unused_space = DISK_SPACE - filesystem.get_size()
+unused_space = DISK_SPACE - sizes[0]
 diff = UNUSED_TARGET - unused_space
 delete_candidates = [size for size in sizes if size >= diff]
 
