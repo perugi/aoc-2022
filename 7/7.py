@@ -82,7 +82,6 @@ DISK_SPACE = 70000000
 UNUSED_TARGET = 30000000
 unused_space = DISK_SPACE - filesystem.get_size()
 diff = UNUSED_TARGET - unused_space
-print(diff)
 delete_candidates = [size for size in sizes if size >= diff]
 
 print(f"The smallest directory that could be deleted: {min(delete_candidates)}")
