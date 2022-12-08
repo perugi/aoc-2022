@@ -41,3 +41,41 @@ visible = observe(forest, visible)
 print(
     f"Number of trees that are visible: {sum([sum(treeline) for treeline in visible])}"
 )
+
+""" Part Two"""
+
+forest = transpose(forest)
+# Create an array of the same dimensions as the forest, to track the scenic scores
+scores = [[1 for _ in forest[0]] for _ in forest]
+
+
+def evaluate(forest, scores):
+    for row, treeline in enumerate(forest):
+        for col, tree in enumerate(treeline):
+            # Look left.
+            visible_trees = treeline[:col]
+            if visible_trees:
+                for index, other_tree in enumerate(reversed(visible_trees)):
+                    if other_tree >= tree:
+                        visible_trees = visible_trees[-index - 1 :]
+                        break
+            scores[row][col] *= len(visible_trees)
+
+            # Look right
+            visible_trees = treeline[col + 1 :]
+            if visible_trees:
+                for index, other_tree in enumerate(visible_trees):
+                    if other_tree >= tree:
+                        visible_trees = visible_trees[: index + 1]
+                        break
+            scores[row][col] *= len(visible_trees)
+
+    return scores
+
+
+scores = evaluate(forest, scores)
+forest = transpose(forest)
+scores = transpose(scores)
+scores = evaluate(forest, scores)
+
+print(f"Highest scenic score: {max([max(treeline) for treeline in scores])}")
