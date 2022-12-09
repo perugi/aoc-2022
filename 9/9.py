@@ -36,10 +36,21 @@ for instr in instrs:
             ((head_pos[0] - tail_pos[0]) ** 2 + (head_pos[1] - tail_pos[1]) ** 2) ** 0.5
         )
         if distance > 1:
+            # move up/down
             if tail_pos[0] == head_pos[0]:
                 tail_pos[1] += sign(head_pos[1] - tail_pos[1])
+            # move left/rigt
             elif tail_pos[1] == head_pos[1]:
-                tail_pos[0] += sign(head_pos[0] - tail_pos[0])
+                tail_pos[0] += sign(head_pos[0]
+            distance = int(
+                (
+                    (positions[h][0] - positions[t][0]) ** 2
+                    + (positions[h][1] - positions[t][1]) ** 2
+                )
+                ** 0.5
+            )
+            if distance > 1:
+                if positions[t][0] == positions[h][0]: - tail_pos[0])
             # diagonal move
             else:
                 tail_pos[0] += sign(head_pos[0] - tail_pos[0])
@@ -75,8 +86,10 @@ for instr in instrs:
                 ** 0.5
             )
             if distance > 1:
+                # move up/down
                 if positions[t][0] == positions[h][0]:
                     positions[t][1] += sign(positions[h][1] - positions[t][1])
+                # move left/rigt
                 elif positions[t][1] == positions[h][1]:
                     positions[t][0] += sign(positions[h][0] - positions[t][0])
                 # diagonal move
