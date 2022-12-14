@@ -73,14 +73,13 @@ print(f"Units of sand (Part One): {sand_no}")
 
 """ Part Two """
 
-# Add a floor, two down from the highest y.
-# Being lazy, so adding a floor of length 1000. There's probably a more generic solution.
+# Add a floor, two down from the highest y. Max width needed is two times the height of the chamber
 obstacles = obstacles_orig.copy()
 floor_y = max([coord[1] for coord in obstacles]) + 2
-min_x = min([coord[0] for coord in obstacles])
-max_x = max([coord[0] for coord in obstacles])
+min_x = 500 - floor_y
+max_x = 500 + floor_y + 1
 
-for x in range(0, 1001):
+for x in range(min_x, max_x):
     obstacles.add((x, floor_y))
 
 rocks_no = len(obstacles)
