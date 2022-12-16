@@ -77,7 +77,7 @@ print(
 RANGE = 4000000
 
 point = namedtuple("point", ("x", "y"))
-# The values represent the projection of the borders to the y-axis.
+# The values represent the projection of the borders + 1 pixel to the y-axis.
 border = namedtuple("border", ("lb, lt, rb, rt"))
 borders = []
 for sensor in sensors:
@@ -94,7 +94,7 @@ for sensor in sensors:
 
     borders.append(border(lb, lt, rb, rt))
 
-# Find an intersection of four borders
+# Find four borders that intersect (lb with rt and lt with rb).
 for b_1, b_2, b_3, b_4 in itertools.product(borders, repeat=4):
     if (
         b_1.lb == b_2.rt and (b_1.rb <= b_2.rb <= b_1.lt or b_1.rb <= b_2.lt <= b_1.lt)
