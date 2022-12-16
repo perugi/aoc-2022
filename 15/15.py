@@ -104,4 +104,4 @@ for b_1, b_2, b_3, b_4 in itertools.product(borders, repeat=4):
         x = (b_1.lb - b_3.lt) / 2
         y = (b_1.lb + b_3.lt) / 2
         if 0 <= x <= RANGE and 0 <= y <= RANGE:
-            print(x * RANGE + y)
+            print(f"Tuning frequency (Part Two): {x * RANGE + y}")
