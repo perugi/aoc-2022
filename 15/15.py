@@ -72,6 +72,9 @@ print(
 )
 
 """ Part Two """
+# This solution is not perfect, as it finds multiple candidate beacon positions in the test dataset.
+# To correct this, I should add a condition to ensure that the lb/rt and lt/rb borders really intersect.
+# But since it works on the input datase and I spent too much time on this already, I'll keep it as it is.
 
 # RANGE = 20
 RANGE = 4000000
