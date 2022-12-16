@@ -72,48 +72,36 @@ print(
 )
 
 """ Part Two """
-""" Idea for further implementation - for each sensor, generate the points just 
-around the border. Then filter for the max value then do a manhattan distance check
-to the other sensors."""
 
-# point = namedtuple("point", ("x", "y"))
-# # The values represent the projection of the borders to the y-axis.
-# border = namedtuple("border", ("lb, lt, rb, rt"))
-# borders = []
-# for sensor in sensors:
+# RANGE = 20
+RANGE = 4000000
 
-#     left_point = point(sensor.x - sensor.dis - 1, sensor.y)
-#     lb = left_point.y + left_point.x
-#     lt = left_point.y - left_point.x
+point = namedtuple("point", ("x", "y"))
+# The values represent the projection of the borders to the y-axis.
+border = namedtuple("border", ("lb, lt, rb, rt"))
+borders = []
+for sensor in sensors:
 
-#     right_point = point(sensor.x + sensor.dis + 1, sensor.y)
-#     rb = right_point.y - right_point.x
-#     rt = right_point.y + right_point.x
+    left_point = point(sensor.x - sensor.dis - 1, sensor.y)
+    print(f"l: {left_point}")
+    lb = left_point.y + left_point.x
+    lt = left_point.y - left_point.x
 
-#     borders.append(border(lb, lt, rb, rt))
+    right_point = point(sensor.x + sensor.dis + 1, sensor.y)
+    print(f"r: {right_point}")
+    rb = right_point.y - right_point.x
+    rt = right_point.y + right_point.x
 
-# # Find an intersection of four borders
-# for b_1, b_2, b_3, b_4 in itertools.product(borders, repeat=4):
-#     if (
-#         b_1.lb == b_2.rt and (b_1.rb <= b_2.rb <= b_1.lt or b_1.rb <= b_2.rt <= b_1.lt)
-#     ) and (
-#         b_3.lt == b_4.rb and (b_3.lb <= b_4.lb <= b_3.rt or b_3.lb <= b_4.rt <= b_3.rt)
-#     ):
-#         print(b_1.lb - b_3.lt / 2)
-#         print(b_1.lb + b_3.lt / 2)
+    borders.append(border(lb, lt, rb, rt))
 
-
-# # # Find the candidate borders - their projection to an axis needs to be two points appart, in order
-# # # to have the space to contain the beacon
-# def check_candidate(border_1, border_2):
-#     if abs(border_1 - border_2) == 2:
-#         return (border_1 + border_2) / 2
-#     else:
-#         return None
-
-
-# # projections_to_x = find_candidates(projections_to_x)
-# # projections_to_y = find_candidates(projections_to_y)
-
-
-# # Find an intersection
+# Find an intersection of four borders
+for b_1, b_2, b_3, b_4 in itertools.product(borders, repeat=4):
+    if (
+        b_1.lb == b_2.rt and (b_1.rb <= b_2.rb <= b_1.lt or b_1.rb <= b_2.lt <= b_1.lt)
+    ) and (
+        b_3.lt == b_4.rb and (b_3.lb <= b_4.lb <= b_3.rt or b_3.lb <= b_4.rt <= b_3.rt)
+    ):
+        x = (b_1.lb - b_3.lt) / 2
+        y = (b_1.lb + b_3.lt) / 2
+        if 0 <= x <= RANGE and 0 <= y <= RANGE:
+            print(x * RANGE + y)
