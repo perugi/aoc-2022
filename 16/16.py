@@ -83,6 +83,7 @@ def perform_action(
                 )
             )
 
+    # TODO: handle the case when no possible action can be taken (all valves open)
     return max(action_rewards)
 
 
