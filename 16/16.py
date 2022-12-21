@@ -51,40 +51,64 @@ shortest_paths = {
 
 
 def perform_action(
+    valves=valves,
     location="AA",
     open_valves=[],
-    pressure_release=0,
+    closed_valves=[valve for valve in valves if valves[valve]["flow_rate"] > 0],
     time_remaining=30,
+    pressure_release=0,
+    memo={},
 ):
-    # Perform one of the possible actions, either by opening the valve or taking the tunnel
-    # to one of the neighbouring valves. The action is performed by recursively calling the
-    # function until the time goes to zero (base case).
-    print(location, open_valves)
+    # print(location, closed_valves, open_valves)
+    key = (
+        location
+        + ","
+        + ",".join(open_valves)
+        + ","
+        + str(time_remaining)
+        + ","
+        + str(pressure_release)
+    )
+    if key in memo:
+        return memo[key]
 
-    if time_remaining == 0:
-        return 0
+    if time_remaining == 0 or not closed_valves:
+        return (pressure_release, open_valves)
 
-    action_rewards = []
+    # print(
+    #     f"location: {location}, time: {time_remaining}, pressure: {pressure_release}, open: {open_valves}, closed: {closed_valves}"
+    # )
 
-    # Open the valve.
-    if location not in open_valves:
-        action_rewards.append(
-            perform_action(location, open_valves + [location], time_remaining - 1)
+    actions = [(0, [])]
+
+    # Move to one of the closed valves with a non-zero flow rate and open it
+    for dest in closed_valves:
+        new_open = open_valves.copy() + [dest]
+        new_closed = closed_valves.copy()
+        new_closed.remove(dest)
+        new_time = time_remaining - (len(shortest_paths[location][dest]) + 1)
+        new_pressure_release = pressure_release + valves[dest]["flow_rate"] * new_time
+        actions.append(
+            perform_action(
+                location=dest,
+                open_valves=new_open,
+                closed_valves=new_closed,
+                time_remaining=new_time,
+                pressure_release=new_pressure_release,
+                memo=memo,
+            )
         )
 
-    # Move to one of the unopened valves. TODO: only move to the closed valves with a non-zero flow rate/
-    for dest in valves[location]["dests"]:
-        if dest not in open_valves:
-            action_rewards.append(
-                perform_action(
-                    dest,
-                    open_valves,
-                    time_remaining - len(shortest_paths[location][dest]),
-                )
-            )
+    # print(time_remaining, actions)
+    actions.sort(key=lambda x: x[0], reverse=True)
+    best_action = actions[0]
 
-    # TODO: handle the case when no possible action can be taken (all valves open)
-    return max(action_rewards)
+    # print(pressure_release)
+    memo[key] = (
+        best_action[0],
+        best_action[1],
+    )
+    return memo[key]
 
 
-print(perform_action())
+print(perform_action(valves))
